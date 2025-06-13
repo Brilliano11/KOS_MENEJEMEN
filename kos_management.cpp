@@ -99,7 +99,7 @@ void tampilFasilitasVIP() {
     cout << "| - Lemari pakaian 2 pintu + cermin        |" << endl;
     cout << "| - Meja belajar + kursi ergonomis         |" << endl;
     cout << "| - Kamar mandi dalam shower               |" << endl;
-    cout << "| - AC                                     |" << endl;
+    cout << "| - AC 1 PK                                |" << endl;
     cout << "| - Wi-Fi gratis                           |" << endl;
     cout << "| - Listrik + air (include)                |" << endl;
     cout << "| - Laundry gratis 2x/minggu               |" << endl;
@@ -295,15 +295,15 @@ void backupData(string nama[], int kamar[], int durasi[], string bayar[], string
     file << "====================================================================" << endl;
     file << "TIPE REGULER (Kamar 1-5)   : Rp 500.000/bulan" << endl;
     file << "- Kamar 3x4m, Single bed, Lemari 2 pintu, Kamar mandi dalam" << endl;
-    file << "- Wi-Fi gratis, Listrik + Air include" << endl;
+    file << "- Wi-Fi gratis, Listrik + Air include, Parkir motor" << endl;
     file << endl;
     file << "TIPE VIP (Kamar 6-10)      : Rp 800.000/bulan" << endl;
-    file << "- Kamar 4x5m, Queen bed, AC 1PK, TV LED 32 inch" << endl;
-    file << "- Water heater, Wi-Fi gratis, Laundry 2x/minggu" << endl;
+    file << "- Kamar 4x5m, Queen bed, AC 1PK, TV LED 32 inch, Kulkas mini" << endl;
+    file << "- Water heater, Wi-Fi , Laundry 2x/minggu, Parkir mobil" << endl;
     file << endl;
     file << "TIPE PREMIUM (Kamar 11-15) : Rp 1.200.000/bulan" << endl;
     file << "- Kamar 5x6m, King bed, AC , Smart TV 43 inch" << endl;
-    file << "- water heatert, Cleaning service, dll" << endl;
+    file << "- water heatert, Cleaning service" << endl;
     file << "====================================================================" << endl;
     
     file.close();
@@ -592,7 +592,6 @@ void laporanKeuangan(string nama[], int kamar[], int durasi[], string bayar[], s
             jumlahBelum++;
         }
         
-        // Kategorisasi berdasarkan tipe kamar
         if (tipeKamar[kamar[i]] == "Reguler") {
             if (bayar[i] == "Lunas") pendapatanReguler += biayaSewa;
         } else if (tipeKamar[kamar[i]] == "VIP") {
@@ -625,7 +624,6 @@ void laporanKeuangan(string nama[], int kamar[], int durasi[], string bayar[], s
     cout << "| Pembayaran Tertunda       : " << setw(2) << jumlahBelum << " penyewa (" << setw(2) << (jumlahBelum * 100 / total) << "%)     |" << endl;
     cout << "+==================================================+" << endl;
     
-    // Detail pembayaran tertunda
     if (jumlahBelum > 0) {
         cout << "\n========== DAFTAR PEMBAYARAN TERTUNDA ==========" << endl;
         cout << "+----+------------------+-------+-----------+------------------+" << endl;
@@ -705,11 +703,18 @@ void validasiInputNama(string &nama) {
     }
 }
 
-void validasiInputTelepon(string telepon) {
+
+void validasiInputTelepon(string &telepon) {
+    bool valid = false;
+    while (!valid) {
         cout << "Nomor telepon (format: 08xxxxxxxxxx): ";
         cin >> telepon;
         
-      
+        if (telepon.length() >= 10 && telepon.length() <= 13 && telepon.substr(0, 2) == "08") {
+            valid = true;
+        } else {
+            cout << "ERROR: Format telepon tidak valid! Gunakan format 08xxxxxxxxxx" << endl;
+        }
     }
 }
 
@@ -753,16 +758,16 @@ void tampilStrukPembayaran(string nama, int kamar, string tipe, int harga, int d
     cout << "\n+============================================+" << endl;
     cout << "|            STRUK PEMBAYARAN               |" << endl;
     cout << "+============================================+" << endl;
-    cout << "| Nama Penyewa  : " << setw(23) << nama << " |" << endl;
-    cout << "| Kamar         : " << setw(2) << kamar << " (Tipe " << setw(8) << tipe << ")    |" << endl;
-    cout << "| Durasi        : " << setw(2) << durasi << " bulan                   |" << endl;
-    cout << "| Harga/bulan   : Rp " << setw(18) << harga << " |" << endl;
+    cout << "| Nama Penyewa  : " <<  nama << endl;
+    cout << "| Kamar         : " << kamar << " (Tipe " << tipe << ") " << endl;
+    cout << "| Durasi        : " <<  durasi << " bulan " << endl;
+    cout << "| Harga/bulan   : Rp " <<  harga  << endl;
     cout << "+============================================+" << endl;
-    cout << "| Subtotal      : Rp " << setw(18) << totalBiaya << " |" << endl;
-    cout << "| Diskon        : Rp " << setw(18) << diskon << " |" << endl;
+    cout << "| Subtotal      : Rp " <<  totalBiaya << endl;
+    cout << "| Diskon        : Rp " <<  diskon<< endl;
     cout << "+============================================+" << endl;
-    cout << "| TOTAL BAYAR   : Rp " << setw(18) << (totalBiaya - diskon) << " |" << endl;
-    cout << "| Status        : " << setw(23) << status << " |" << endl;
+    cout << "| TOTAL BAYAR   : Rp " <<  (totalBiaya - diskon) << endl;
+    cout << "| Status        : " << status << endl;
     cout << "+============================================+" << endl;
     cout << "|        TERIMA KASIH & SELAMAT TINGGAL     |" << endl;
     cout << "+============================================+" << endl;
@@ -830,7 +835,7 @@ int main() {
                 }
                 
                 cout << "\n========== INPUT DATA PENYEWA ==========" << endl;
-                cin.ignore(); 
+                cin.ignore();
                 
                 validasiInputNama(nama[totalPenyewa]);
                 validasiInputTelepon(telepon[totalPenyewa]);
@@ -849,7 +854,6 @@ int main() {
                         continue;
                     }
                     
-                    // Tampilkan info kamar yang dipilih
                     cout << "INFO: Anda memilih Kamar " << kamar[totalPenyewa] 
                          << " - Tipe " << tipeKamar[kamar[totalPenyewa]]
                          << " - Rp " << hargaKamar[kamar[totalPenyewa]] << "/bulan" << endl;
@@ -857,7 +861,6 @@ int main() {
                     break;
                 } while (true);
                 
-                // Tampilkan fasilitas kamar yang dipilih
                 if (tipeKamar[kamar[totalPenyewa]] == "Reguler") {
                     tampilFasilitasReguler();
                 } else if (tipeKamar[kamar[totalPenyewa]] == "VIP") {
@@ -872,7 +875,6 @@ int main() {
                 cout << "Status pembayaran (Lunas/Belum): ";
                 cin >> bayar[totalPenyewa];
                 
-                // Hitung total biaya dan diskon
                 int totalBiaya = hargaKamar[kamar[totalPenyewa]] * durasi[totalPenyewa];
                 int diskon = hitungDiskon(durasi[totalPenyewa], totalBiaya);
                 
@@ -919,70 +921,184 @@ int main() {
             }
             
             case 4: {
-                bersihLayar();
-                header();
-                cout << "\n========== UPDATE STATUS PEMBAYARAN ==========" << endl;
-                
-                if (totalPenyewa == 0) {
-                    cout << "INFO: Belum ada data penyewa untuk diupdate." << endl;
-                    pause();
-                    break;
-                }
-                
-                cout << "\nDaftar penyewa dengan status pembayaran:" << endl;
-                garis();
-                
-                for (int i = 0; i < totalPenyewa; i++) {
-                    cout << (i+1) << ". " << nama[i] << " - Kamar " << kamar[i] 
-                         << " - Status: " << bayar[i];
-                    if (bayar[i] == "Belum") {
-                        cout << " -> PERLU DIBAYAR!";
-                    }
-                    cout << endl;
-                }
-                
-                int nomorPenyewa;
-                cout << "\nPilih nomor penyewa untuk update pembayaran: ";
-                cin >> nomorPenyewa;
-                
-                if (nomorPenyewa >= 1 && nomorPenyewa <= totalPenyewa) {
-                    if (bayar[nomorPenyewa-1] == "Belum") {
-                        int totalBayar = hargaKamar[kamar[nomorPenyewa-1]] * durasi[nomorPenyewa-1];
-                        int diskon = hitungDiskon(durasi[nomorPenyewa-1], totalBayar);
-                        
-                        cout << "\n========== KONFIRMASI PEMBAYARAN ==========" << endl;
-                        cout << "Nama Penyewa : " << nama[nomorPenyewa-1] << endl;
-                        cout << "Total Tagihan: Rp " << totalBayar << endl;
-                        cout << "Diskon       : Rp " << diskon << endl;
-                        cout << "Yang Dibayar : Rp " << (totalBayar - diskon) << endl;
-                        cout << "Konfirmasi pembayaran (y/n): ";
-                        
-                        char konfirmasi;
-                        cin >> konfirmasi;
-                        
-                        if (konfirmasi == 'y' || konfirmasi == 'Y') {
-                            bayar[nomorPenyewa-1] = "Lunas";
-                            simpanDataKeFile(nama, kamar, durasi, bayar, telepon, totalPenyewa);
-                            animasiLoading();
-                            
-                            cout << "\nSUCCESS: Pembayaran " << nama[nomorPenyewa-1] 
-                                 << " berhasil dikonfirmasi!" << endl;
-                            tampilStrukPembayaran(nama[nomorPenyewa-1], kamar[nomorPenyewa-1], 
-                                                tipeKamar[kamar[nomorPenyewa-1]], hargaKamar[kamar[nomorPenyewa-1]], 
-                                                durasi[nomorPenyewa-1], totalBayar, diskon, "LUNAS");
-                        } else {
-                            cout << "Update pembayaran dibatalkan." << endl;
-                        }
-                    } else {
-                        cout << "INFO: Pembayaran penyewa ini sudah lunas sebelumnya." << endl;
-                    }
-                } else {
-                    cout << "ERROR: Nomor penyewa tidak valid!" << endl;
-                }
-                
-                pause();
-                break;
+    bersihLayar();
+    header();
+    cout << "\n========== SISTEM PEMBAYARAN KOS IDAMAN ==========" << endl;
+    
+    if (totalPenyewa == 0) {
+        cout << "INFO: Belum ada data penyewa untuk diproses pembayaran." << endl;
+        pause();
+        break;
+    }
+    
+    cout << "\n========== DAFTAR TAGIHAN YANG BELUM LUNAS ==========" << endl;
+    garis();
+    
+    bool adaTagihan = false;
+    int nomorUrut = 1;
+    
+    for (int i = 0; i < totalPenyewa; i++) {
+        if (bayar[i] == "Belum") {
+            int totalTagihan = hargaKamar[kamar[i]] * durasi[i];
+            int diskon = hitungDiskon(durasi[i], totalTagihan);
+            int finalTagihan = totalTagihan - diskon;
+            
+            cout << nomorUrut << ". " << nama[i] << " (Kamar " << kamar[i] 
+                 << " - " << tipeKamar[kamar[i]] << ")" << endl;
+            cout << "   Tagihan: Rp " << totalTagihan;
+            if (diskon > 0) {
+                cout << " - Diskon: Rp " << diskon << " = Rp " << finalTagihan;
             }
+            cout << " | Durasi: " << durasi[i] << " bulan" << endl;
+            cout << "   Telepon: " << telepon[i] << endl;
+            garisTipis();
+            
+            adaTagihan = true;
+            nomorUrut++;
+        }
+    }
+    
+    if (!adaTagihan) {
+        cout << "INFORMASI: Semua penyewa sudah melunasi pembayaran!" << endl;
+        cout << "Tidak ada tagihan yang tertunggak saat ini." << endl;
+        pause();
+        break;
+    }
+    
+    cout << "\n========== SEMUA DATA PENYEWA & STATUS BAYAR ==========" << endl;
+    cout << "+----+------------------+-------+----------+------------------+" << endl;
+    cout << "| No |      Nama        | Kamar |  Status  |   Total Tagihan  |" << endl;
+    cout << "+----+------------------+-------+----------+------------------+" << endl;
+    
+    for (int i = 0; i < totalPenyewa; i++) {
+        int totalTagihan = hargaKamar[kamar[i]] * durasi[i];
+        int diskon = hitungDiskon(durasi[i], totalTagihan);
+        int finalTagihan = totalTagihan - diskon;
+        
+        cout << "| " << setw(2) << (i+1) << " | " << setw(16) << nama[i] 
+             << " |   " << setw(2) << kamar[i] << "  | " << setw(8) << bayar[i] 
+             << " | Rp " << setw(12) << finalTagihan << " |" << endl;
+    }
+    cout << "+----+------------------+-------+----------+------------------+" << endl;
+    
+    int nomorPenyewa;
+    cout << "\nPilih nomor penyewa untuk proses pembayaran (1-" << totalPenyewa << "): ";
+    cin >> nomorPenyewa;
+    
+    if (nomorPenyewa < 1 || nomorPenyewa > totalPenyewa) {
+        cout << "ERROR: Nomor penyewa tidak valid!" << endl;
+        pause();
+        break;
+    }
+    
+    int indexPenyewa = nomorPenyewa - 1;
+    
+    if (bayar[indexPenyewa] == "Lunas") {
+        cout << "\n========== INFORMASI PEMBAYARAN ==========" << endl;
+        cout << "INFO: Penyewa " << nama[indexPenyewa] << " sudah melunasi pembayaran." << endl;
+        cout << "Status: LUNAS ?" << endl;
+        cout << "Tidak ada tagihan yang perlu dibayar." << endl;
+        
+        char lihatDetail;
+        cout << "\nIngin melihat detail pembayaran? (y/n): ";
+        cin >> lihatDetail;
+        
+        if (lihatDetail == 'y' || lihatDetail == 'Y') {
+            int totalBayar = hargaKamar[kamar[indexPenyewa]] * durasi[indexPenyewa];
+            int diskon = hitungDiskon(durasi[indexPenyewa], totalBayar);
+            
+            tampilStrukPembayaran(nama[indexPenyewa], kamar[indexPenyewa], 
+                                tipeKamar[kamar[indexPenyewa]], hargaKamar[kamar[indexPenyewa]], 
+                                durasi[indexPenyewa], totalBayar, diskon, "LUNAS");
+        }
+        
+        pause();
+        break;
+    }
+    
+    int totalBayar = hargaKamar[kamar[indexPenyewa]] * durasi[indexPenyewa];
+    int diskon = hitungDiskon(durasi[indexPenyewa], totalBayar);
+    int finalBayar = totalBayar - diskon;
+    
+    cout << "\n========== DETAIL TAGIHAN PEMBAYARAN ==========" << endl;
+    cout << "Nama Penyewa     : " << nama[indexPenyewa] << endl;
+    cout << "Nomor Kamar      : " << kamar[indexPenyewa] << " (Tipe " << tipeKamar[kamar[indexPenyewa]] << ")" << endl;
+    cout << "Nomor Telepon    : " << telepon[indexPenyewa] << endl;
+    cout << "Durasi Sewa      : " << durasi[indexPenyewa] << " bulan" << endl;
+    cout << "Harga per Bulan  : Rp " << hargaKamar[kamar[indexPenyewa]] << endl;
+    garis();
+    cout << "Subtotal         : Rp " << totalBayar << endl;
+    
+    if (diskon > 0) {
+        cout << "Diskon Durasi    : Rp " << diskon;
+        if (durasi[indexPenyewa] >= 12) {
+            cout << " (15% - Sewa 12 bulan)";
+        } else if (durasi[indexPenyewa] >= 9) {
+            cout << " (10% - Sewa 9 bulan)";
+        } else if (durasi[indexPenyewa] >= 6) {
+            cout << " (5% - Sewa 6 bulan)";
+        }
+        cout << endl;
+        garis();
+    }
+    
+    cout << "TOTAL YANG HARUS DIBAYAR: Rp " << finalBayar << endl;
+    garisTebal();
+    
+    cout << "\n========== KONFIRMASI PEMBAYARAN ==========" << endl;
+    cout << "Apakah pembayaran sebesar Rp " << finalBayar << " sudah diterima?" << endl;
+    cout << "1. Ya, pembayaran sudah diterima (LUNAS)" << endl;
+    cout << "2. Belum, tunda pembayaran" << endl;
+    cout << "3. Batal proses pembayaran" << endl;
+    cout << "Pilihan Anda: ";
+    
+    int pilihanBayar;
+    cin >> pilihanBayar;
+    
+    switch (pilihanBayar) {
+        case 1: {
+            bayar[indexPenyewa] = "Lunas";
+            simpanDataKeFile(nama, kamar, durasi, bayar, telepon, totalPenyewa);
+            
+            animasiLoading();
+            cout << "\n========== PEMBAYARAN BERHASIL! ==========" << endl;
+            cout << "SUCCESS: Pembayaran " << nama[indexPenyewa] << " berhasil diproses!" << endl;
+            cout << "Status pembayaran telah diubah menjadi LUNAS." << endl;
+            cout << "Data telah disimpan ke sistem." << endl;
+            
+            tampilStrukPembayaran(nama[indexPenyewa], kamar[indexPenyewa], 
+                                tipeKamar[kamar[indexPenyewa]], hargaKamar[kamar[indexPenyewa]], 
+                                durasi[indexPenyewa], totalBayar, diskon, "LUNAS");
+            
+            cout << "\nPEMBYAYARAN TELAH DIKONFIRMASI DAN DICATAT DALAM SISTEM!" << endl;
+            break;
+        }
+        
+        case 2: {
+            cout << "\n========== PEMBAYARAN DITUNDA ==========" << endl;
+            cout << "INFO: Pembayaran " << nama[indexPenyewa] << " belum diproses." << endl;
+            cout << "Status tetap: BELUM LUNAS" << endl;
+            cout << "Silakan proses pembayaran di lain waktu." << endl;
+            cout << "\nCATATAN: Tagihan sebesar Rp " << finalBayar << " masih berlaku." << endl;
+            break;
+        }
+        
+        case 3: {
+            cout << "\n========== PROSES DIBATALKAN ==========" << endl;
+            cout << "INFO: Proses pembayaran dibatalkan." << endl;
+            cout << "Tidak ada perubahan pada data penyewa." << endl;
+            break;
+        }
+        
+        default: {
+            cout << "ERROR: Pilihan tidak valid! Proses pembayaran dibatalkan." << endl;
+            break;
+        }
+    }
+    
+    pause();
+    break;
+}
             
             case 5: {
                 bersihLayar();
