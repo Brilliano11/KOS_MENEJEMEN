@@ -933,7 +933,6 @@ int main() {
             }
             
             system("cls");
-		
             kosanKu.tampilkanHeader();
 
             switch (pilihan) {
